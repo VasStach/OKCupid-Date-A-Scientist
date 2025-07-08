@@ -71,6 +71,27 @@ def get_best_thresholds(probs: np.ndarray, y_test: pd.Series) -> tuple[float, fl
     return t_opt_o, t_opt_s
 
 
+def get_best_thresh_binary(probs: np.ndarray, y_test: pd.Series) -> float:
+    """
+    Finds the optimal probability threshold for a binary classification problem
+    (e.g., drugs vs. no drugs) based on the best F1 score.
+
+    Args:
+        probs (np.ndarray): Array of predicted probabilities for the positive class (shape: [n_samples,]).
+        y_test (pd.Series): True binary labels (0 or 1).
+
+    Returns:
+        float: The threshold that yields the highest F1 score.
+    """
+
+    prec, rec, thresh = precision_recall_curve(y_test, probs)
+    f1 = 2 * (prec * rec) / (prec + rec + 1e-12)
+    best_idx = np.argmax(f1)
+    t_opt = thresh[best_idx]
+    print(f"Best threshold: {t_opt}, F1: {f1[best_idx]}")
+    return t_opt
+
+
 def predict_with_thresholds(probs: np.ndarray, t_o: float, t_s: float) -> np.ndarray:
     y_hat = np.full(len(probs), 0)
     mask_o = probs[:, 2] > t_o
