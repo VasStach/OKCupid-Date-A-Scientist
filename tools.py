@@ -84,7 +84,7 @@ def get_best_thresh_binary(probs: np.ndarray, y_test: pd.Series) -> float:
         float: The threshold that yields the highest F1 score.
     """
 
-    prec, rec, thresh = precision_recall_curve(y_test, probs)
+    prec, rec, thresh = precision_recall_curve(y_test.tolist(), probs)
     f1 = 2 * (prec * rec) / (prec + rec + 1e-12)
     best_idx = np.argmax(f1)
     t_opt = thresh[best_idx]
