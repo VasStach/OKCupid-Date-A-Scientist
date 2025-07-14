@@ -35,7 +35,7 @@ def is_strict_diet(val: str) -> bool:
     if pd.isna(val):
         return False
     has_specific_diet = not any(exp in val for exp in ["anything", "other"])
-    return True if "strictly" in val and has_specific_diet else False
+    return "strictly" in val and has_specific_diet
 
 
 def get_best_thresholds(probs: np.ndarray, y_test: pd.Series) -> tuple[float, float]:
